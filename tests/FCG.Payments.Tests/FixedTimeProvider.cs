@@ -1,0 +1,6 @@
+namespace FCG.Payments.Tests;
+
+internal sealed class FixedTimeProvider(DateTimeOffset utcNow) : TimeProvider
+{
+    public override DateTimeOffset GetUtcNow() => utcNow;
+}

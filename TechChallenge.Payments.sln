@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{568B5FEF-1901-482B-9855-4ECB31087344}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG.Payments.Api", "src\FCG.Payments.Api\FCG.Payments.Api.csproj", "{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{37E712F2-82D5-4B4B-8623-463FF304B3BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCG.Payments.Tests", "tests\FCG.Payments.Tests\FCG.Payments.Tests.csproj", "{FF36363F-8E9A-4634-B59B-F23FAB4AFF43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF36363F-8E9A-4634-B59B-F23FAB4AFF43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF36363F-8E9A-4634-B59B-F23FAB4AFF43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF36363F-8E9A-4634-B59B-F23FAB4AFF43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF36363F-8E9A-4634-B59B-F23FAB4AFF43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FDE4DBBE-F5B9-4F00-A04B-EDC6A3504A50} = {568B5FEF-1901-482B-9855-4ECB31087344}
+		{FF36363F-8E9A-4634-B59B-F23FAB4AFF43} = {37E712F2-82D5-4B4B-8623-463FF304B3BE}
+	EndGlobalSection
+EndGlobal
