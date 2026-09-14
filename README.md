@@ -1,9 +1,10 @@
 # FIAP Cloud Games - PaymentsAPI
 
-Microsservico de pagamentos da Fase 2 do Tech Challenge FIAP.
+Microsservico de pagamentos evoluido para a Fase 3 do Tech Challenge FIAP.
+Baseline preservada na tag `fase-2-final`.
 
 O servico consome `OrderPlacedEvent`, simula o pagamento e publica
-`PaymentProcessedEvent`:
+`PaymentProcessedEvent` no RabbitMQ para CatalogAPI e no SQS para a Lambda:
 
 - `Price <= Payment__ApprovalLimit`: `Approved`;
 - `Price > Payment__ApprovalLimit`: `Rejected`.
@@ -14,12 +15,22 @@ encaminhados pelo MassTransit para a fila `payments-order-placed_error`.
 
 Nao existe integracao com um provedor de pagamentos nem persistencia de dados.
 
+A publicacao e sequencial: RabbitMQ primeiro, SQS depois. Qualquer falha propaga
+para o consumer. MassTransit repete apos 5, 15 e 30 segundos; mensagens invalidas
+nao sao repetidas. Apos esgotar retries, a mensagem vai para
+`payments-order-placed_error` e requer diagnostico e reprocessamento operacional.
+Nao foi criado um novo outbox. Uma falha SQS apos sucesso RabbitMQ pode repetir
+o resultado no CatalogAPI; sua protecao de biblioteca e preservada. OrderId e
+estavel em todas as tentativas; o timestamp pode mudar, sem mudar a deduplicacao
+da Lambda. Nao ha transacao atomica entre os dois destinos.
+
 ## Tecnologias
 
 - .NET 8
 - ASP.NET Core Minimal APIs
 - MassTransit 8.5.10
 - RabbitMQ
+- AWS SDK SQS 4.0.100.13
 - Serilog
 - xUnit
 - Docker
@@ -70,6 +81,11 @@ Os contratos usam o namespace `FCG.IntegrationEvents.V1`.
 | `RabbitMq__Password` | Sim | Senha do RabbitMQ. |
 | `RabbitMq__OrderPlacedQueue` | Nao | Fila que recebe `OrderPlacedEvent`. |
 | `Payment__ApprovalLimit` | Nao | Limite inclusivo para aprovacao; padrao `100.00`. |
+| `Sqs__Region` | Nao | Regiao AWS; us-east-1. |
+| `Sqs__QueueUrl` | Nao | URL HTTPS da fila de pagamento na mesma regiao. |
+| `AWS_ACCESS_KEY_ID` | Sim | Credencial temporaria da role payments publisher. |
+| `AWS_SECRET_ACCESS_KEY` | Sim | Segredo temporario. |
+| `AWS_SESSION_TOKEN` | Sim | Token STS; renovar antes de expirar. |
 
 Credenciais nao devem ser adicionadas ao `appsettings.json`.
 
@@ -80,6 +96,9 @@ Defina as credenciais do broker:
 ```bash
 export RabbitMq__Username='<rabbitmq-username>'
 export RabbitMq__Password='<rabbitmq-password>'
+export Sqs__Region=us-east-1
+export Sqs__QueueUrl='https://sqs.us-east-1.amazonaws.com/ACCOUNT_ID/fcg-fase3-payment-processed'
+# Injete as tres variaveis AWS temporarias da role de publicacao.
 ```
 
 Execute:
@@ -112,6 +131,14 @@ O projeto usa o runner nativo do xUnit v3. Os testes validam:
 - falha para mensagens invalidas;
 - publicacao de um unico resultado para pedido valido;
 - ausencia de publicacao para pedido invalido.
+- contratos identicos no RabbitMQ e no JSON SQS;
+- falha SQS apos sucesso RabbitMQ e retry preservando OrderId;
+- falha RabbitMQ propagada e recuperacao posterior.
+
+O ensaio real esta em `compose.stage4.yaml` e `scripts/stage4-smoke.ps1` no
+[repositorio de orquestracao](https://github.com/arthuurqueirozz/tech-challenge-3-orchestration).
+As credenciais de deploy ficam no host; o container recebe somente uma sessao
+STS da role com SendMessage na fila de pagamento.
 
 ## Docker
 
