@@ -1,5 +1,16 @@
 # FIAP Cloud Games - PaymentsAPI
 
+## Execução integrada da Fase 3
+
+O [README central de orquestração](https://github.com/arthuurqueirozz/tech-challenge-3-orchestration)
+contém o deploy completo no Kind, configuração AWS, acesso pelo Kong, dashboard,
+teste integrado e encerramento. Use esse guia para reproduzir a entrega.
+Arquivos de Compose/Kubernetes e comandos individuais preservados neste
+repositório servem a desenvolvimento e histórico; a stack final é mantida na
+orquestração e não executa a NotificationsAPI antiga.
+
+Código da Fase 3 na branch `fase-3`; baseline preservada em `fase-2-final`.
+
 Microsservico de pagamentos evoluido para a Fase 3 do Tech Challenge FIAP.
 Baseline preservada na tag `fase-2-final`.
 
