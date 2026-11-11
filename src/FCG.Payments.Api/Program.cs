@@ -27,8 +27,7 @@ app.MapGet("/", () => TypedResults.Ok(new
     service = "FCG Payments API",
     status = "running"
 }))
-.WithName("GetServiceStatus")
-.WithOpenApi();
+.WithName("GetServiceStatus");
 
 app.MapHealthChecks("/health");
 
